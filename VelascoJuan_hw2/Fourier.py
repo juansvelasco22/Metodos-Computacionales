@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pylab as plt
 from scipy.fftpack import fft, fftfreq
 from scipy import fftpack
+from matplotlib.colors import LogNorm
 
 
 #Importar los archivos de las fotografias
@@ -11,23 +12,38 @@ cara2=plt.imread("cara_03_grisesMF.png")
 
 #Usando los paquetes de Numpy calculamos la transformada de Fourier
 
-fouriercara1=fftpack.fft2(cara1).real
-fouriercara2=fftpack.fft2(cara2).real
+Fcara1=fftpack.fft2(cara1)
+Fcara2=fftpack.fft2(cara2)
 
-frec=np.fft.fftfreq(len(fouriercara1),1)
-frecc=np.fft.fftfreq(245,1)
-freq2=np.fft.fftshift(frec)
-
-
-plt.plot(frec,fouriercara1)
-plt.xlabel('Frecuencias')
-plt.ylabel('Amplitud')
+#Graficas de los espectros de Fourier de las dos imagenes
+plt.imshow(abs(Fcara1), norm=LogNorm(vmin=1))
+plt.colorbar()
+plt.imshow(np.abs(Fcara2), norm=LogNorm(vmin=1))
+plt.colorbar()
 
 
-plt.plot(frec,fouriercara2)
-plt.xlabel('Frecuencias')
-plt.ylabel('Amplitud')
+#Tomar de la cara 1 las frecuencias altas
+filas1, columnas1 =Fcara1.shape
+freq1=Fcara1
+freq1[int(filas1*0.4):int(filas1*(1-0.4))] = 0
+freq1[:, int(columnas1*0.4):int(columnas1*(1-0.4))] = 0
+plt.imshow(abs(freq1), norm=LogNorm(vmin=1))
+plt.colorbar()
 
+#Tomar de la cara 2 las frecuencias bajas
+filas2, columnas2 =Fcara2.shape
+freq2=Fcara2.copy()
+freq2[int(filas2*0.4):int(filas2*(1-0.4))] = 0
+freq2[:,int(columnas2*0.4):int(columnas2*(1-0.4))] = 0
+Filtro = (Fcara2-freq2).real
+plt.imshow(abs(Filtro), norm=LogNorm(vmin=1))
+plt.colorbar()
 
-fouriercara1[abs(frec) > 0.1] = 0
-fouriercara2[abs(frec) < 0.1] = 0
+#Crear la imagen hibrida
+Nueva=(Filtro+freq1)
+plt.imshow(abs(Nueva), norm=LogNorm(vmin=1))
+plt.colorbar()
+
+#Calcular la transformada inversa
+Inversa=fftpack.ifft2(Nueva)
+plt.imshow(abs(Inversa),plt.cm.gray)
