@@ -5,6 +5,7 @@ using namespace std;
 
 void euler(double dt,string datos);
 void LP(double dt, string datos);
+void RK4(double dt, string datos);
 
 int main()
 {
@@ -15,6 +16,59 @@ int main()
     LP(0.00001, "LP_0.00001.dat");
     LP(0.000001,"LP_0.000001.dat");
     return 0;
+}
+
+void RK4(double dt, string datos)
+{
+    double G=6.674*pow(10,-29);
+    double  Msol=1.989*pow(10,30);
+    
+    double xpres;
+    double xpas;
+    double ypres;
+    double ypas;
+    double vxpres;
+    double vxpas;
+    double vypres;
+    double vypas;
+    double k1;
+    double k2;
+    double k3;
+    double k4;
+    
+    double k1x;
+    double k2x;
+    double k3x;
+    double k4x;
+    
+    double k1y;
+    double k2y;
+    double k3y;
+    double k4y;
+    
+    double k1vx;
+    double k2vx;
+    double k3vx;
+    double k4vx;
+    
+    double k1vy;
+    double k2vy;
+    double k3vy;
+    double k4vy;
+   
+    
+    
+    
+    ofstream outfile;
+    outfile.open(datos);
+    xpas=0.1163;
+    ypas=0.9772;
+    vxpas=-6.36;
+    vypas=0.606;
+    
+    double t=0.0;
+    
+    outfile.close();
 }
 
 void LP(double dt, string datos)
