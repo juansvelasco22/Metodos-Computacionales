@@ -4,13 +4,16 @@
 using namespace std;
 
 void euler(double dt,string datos);
-void LF(double dt, string datos);
+void LP(double dt, string datos);
 
 int main()
 {
-    euler(0.0001, "e_0.005.dat");
-    euler(0.00001, "e_0.001.dat");
-    euler(0.000001,"e_0.0001.dat");
+    euler(0.0001, "e_0.0001.dat");
+    euler(0.00001, "e_0.00001.dat");
+    euler(0.000001,"e_0.000001.dat");
+    LP(0.0001, "LP_0.0001.dat");
+    LP(0.00001, "LP_0.00001.dat");
+    LP(0.000001,"LP_0.000001.dat");
     return 0;
 }
 
@@ -27,6 +30,7 @@ void LP(double dt, string datos)
     double vxpas;
     double vypres;
     double vypas;
+    double r;
     
     ofstream outfile;
     outfile.open(datos);
@@ -35,6 +39,47 @@ void LP(double dt, string datos)
     ypas=0.9772;
     vxpas=-6.36;
     vypas=0.606;
+    r=sqrt(xpas*xpas+ypas*ypas);
+    
+    double t=0.0;
+    outfile<<xpas<<" "<<ypas<<" "<<vxpas<<" "<<vypas<<" "<<r<<" "<<t<<endl;
+    
+    //Primer paso se hace con Euler
+    
+    xpres=vxpas*dt +xpas;
+    ypres=vypas*dt +ypas;
+    vxpres=(-((G*Msol)/(r*r*r))*xpas)*dt+vxpas;
+    vypres=(-((G*Msol)/(r*r*r))*ypas)*dt+vypas;
+    
+    outfile<<xpres<<" "<<ypres<<" "<<vxpres<<" "<<vypres<<" "<<r<<" "<<t<<endl;
+    
+    xpas=xpres;
+    ypas=ypres;
+    vxpas=vxpres;
+    vypas=vypres;
+    t=t+dt;
+    
+    //Empieza LeapFrog
+    
+    for(int i=1;i<=200000;i++)
+    {
+        r=sqrt(xpas*xpas+ypas*ypas);
+        xpres=vxpas*2*dt +xpas;
+        ypres=vypas*dt +ypas;
+        
+        vxpres=(-((G*Msol)/(r*r*r))*xpas)*2*dt+vxpas;
+        vypres=(-((G*Msol)/(r*r*r))*ypas)*2*dt+vypas;
+        
+        outfile<<xpres<<" "<<ypres<<" "<<vxpres<<" "<<vypres<<" "<<r<<" "<<t<<endl;
+        
+        xpas=xpres;
+        ypas=ypres;
+        vxpas=vxpres;
+        vypas=vypres;
+        t=t+dt;
+    }
+    
+    outfile.close();
 }
 
 void euler(double dt, string datos)
