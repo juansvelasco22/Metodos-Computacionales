@@ -25,7 +25,7 @@ ax1.set_title("Espectro de Fourier de cara 1")
 ax2.imshow(abs(Fcara2), norm=LogNorm(vmin=1))
 ax2.set_title("Espectro de Fourier de cara 2")
 fig.colorbar(plt.cm.ScalarMappable())
-fig.savefig("Espectros_fourier.pdf")
+fig.savefig("EFFtIm.pdf")
 plt.close(fig)
 
 
@@ -52,7 +52,7 @@ ax1.set_title("Filtro de frecuencias altas")
 ax2.imshow(abs(Filtro), norm=LogNorm(vmin=1))
 ax2.set_title("Filtro de frecuencias bajas")
 fig.colorbar(plt.cm.ScalarMappable())
-fig.savefig("Filtros.pdf")
+fig.savefig("ImProceso.pdf")
 plt.close(fig)
 
 #Generar el nuevo espectro que corresponde a la suma de los dos filtros
@@ -60,7 +60,7 @@ Nueva=(Filtro+freq1)
 plt.imshow(abs(Nueva), norm=LogNorm(vmin=1))
 plt.title("Espectro con la suma de los filtros")
 plt.colorbar()
-plt.savefig("Espectro_nuevo.pdf")
+plt.savefig("ImProceso1.pdf")
 plt.close()
 
 
@@ -68,5 +68,5 @@ plt.close()
 Inversa=fftpack.ifft2(Nueva)
 plt.imshow(abs(Inversa),plt.cm.gray)
 plt.title("Cara Hibrida")
-plt.savefig("Cara_Hibrida.pdf")
+plt.savefig("ImHybrid.pdf")
 plt.close()
